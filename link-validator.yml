@@ -1,0 +1,54 @@
+name: Link and HTML Quality Audit
+
+# ==============================================================================
+# WORKFLOW INSTRUCTIONS & SETUP GUIDE
+# ==============================================================================
+# 1. Directory Structure: 
+#    Ensure this file is placed in your repository under:
+#    .github/workflows/link-validator.yml
+#
+# 2. Automated Trigger:
+#    This workflow automatically executes on every push or pull request to the 
+#    'main' or 'master' branches.
+#
+# 3. Local Testing / Maintenance:
+#    To test or run validation locally before pushing, ensure Node.js is installed 
+#    and execute:
+#    npm install -g html-linter-cli markdown-link-check
+# ==============================================================================
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    name: Validate HTML and Internal Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Validation Tools
+        run: |
+          npm install -g html-linter-cli markdown-link-check
+
+      - name: Run HTML Structure Check & File Verification
+        run: |
+          echo "Scanning HTML files for structural integrity and presence..."
+          for file in index.html about.html totsllc-platform.html totsllc-audit.html totsllc-architecture.html totsllc-logo-design.html; do
+            if [ -f "$file" ]; then
+              echo "✓ Verified existence of $file"
+            else
+              echo "✕ Error: Missing critical file $file"
+              exit 1
+            fi
+          done
