@@ -17,11 +17,14 @@ name: Link and HTML Quality Audit
 #    npm install -g html-linter-cli markdown-link-check
 # ==============================================================================
 
+name: Link and HTML Quality Audit
+
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch: # Allows manual trigger from the GitHub UI
 
 jobs:
   validate:
